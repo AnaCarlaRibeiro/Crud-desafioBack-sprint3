@@ -16,7 +16,6 @@ export class Contacts {
   @CreateDateColumn()
   createdAt: Date
 
-
-  @ManyToOne(() => User, { eager: true })
+  @ManyToOne(() => User, { eager: true, onDelete:"CASCADE", cascade: true,  })
   user: User;
 }

@@ -1,3 +1,4 @@
+import { Contacts } from './../entities/contact.entity';
 import { IContactRequest, IContactUpdate } from './../interfaces/contacts/index';
 import { instanceToPlain } from 'class-transformer';
 
@@ -36,9 +37,25 @@ const listContactController = async (req: Request, res: Response) => {
 
 const updateContactController = async (req: Request, res: Response) => {
 
-  const contact: IContactUpdate = req.body;
-  const id: string = req.params.id;
-  await updateContactService(contact, id);
+  try {
+    const contact: IContactUpdate = req.body;
+
+    const id: string = req.params.id;
+    const updateContact = await updateContactService(contact, id);
+     if (updateContact instanceof Contacts) {
+      return res.json(updateContact);
+    }
+    return res.status(updateContact[1] as number).json({
+      message: updateContact[0],
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
+  }
+  
   return res.status(401).json({
     message:"update performed successfully"
   });

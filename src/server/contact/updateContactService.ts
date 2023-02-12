@@ -8,12 +8,20 @@ import AppDataSource from "../../data-source";
 
 const updateContactService = async (
   { email, phone }: IContactUpdate,
-  id: string
+  id: any
 ): Promise<Contacts | Array<string | number>> => {
   const contactRepository = AppDataSource.getRepository(Contacts);
+  // const UserRepository = AppDataSource.getRepository(User);
+  
+  
+  console.log(id);
   const findContact = await contactRepository.findOneBy({
-    id,
+    user:id
   });
+  console.log(findContact);
+  
+  
+  
   if (!findContact) {
     throw new AppError(404, "User not found");
   }
